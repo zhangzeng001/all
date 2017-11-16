@@ -1,0 +1,50 @@
+使用configparser模块做配置文件user.cfg
+from conf import settings
+import configparser
+config = configparser.ConfigParser()
+config.read(settings.ACCOUNT_FILE)
+
+查看用户是否存在
+if username in config.sections():
+    _password = config[username]["Password"]
+
+
+
+传参使用import optparse模块标准化传参
+以下取到的参数看似是一个字典，其实不是，参数取值类似于元组，  a,b = parser.parse_args()
+例如取user则使用  a.user  就可以取到值
+class FTPClient(object):
+    def __init__(self):
+        parser = optparse.OptionParser()
+        parser.add_option("-s", "--server", dest="server", help="ftp server ip_addr")
+        parser.add_option("-P", "--port", type="int", dest="port", help="ftp server port")
+        parser.add_option("-u", "--username", dest="username", help="username")
+        parser.add_option("-p", "--password", dest="password", help="password")
+        self.options , self.args = parser.parse_args()
+        self.verify_args(self.options,self.args)
+        self.make_connection()
+
+    def make_connection(self):
+        self.sock = socket.socket()
+        self.sock.connect((self.options.server,self.options.port))
+
+    #校验parser参数
+    def verify_args(self,options,args):
+        if options.username is not None and options.password is not None:
+            pass
+        elif options.username is None and options.password is None:
+            pass
+        else:
+            # if options.username is None or options.password is None:
+            exit("输入用户名，密码")
+
+        if options.server and options.port:
+            # print(options)
+            if options.port > 0 and options.port < 65535:
+                return True
+            else:
+                print("-P  0-65535")
+
+
+
+
